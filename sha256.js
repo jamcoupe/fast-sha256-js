@@ -10,10 +10,14 @@
  *   sha256.pbkdf2(password, salt, rounds, dkLen) -> dk
  *
  */
-(function(root, f) {
-  if (typeof module !== 'undefined' && module.exports) module.exports = f();
-  else root.sha256 = f();
-})(this, function() {
+(function (deps, factory) {
+	if (typeof module === 'object' && typeof module.exports === 'object') {
+		var v = factory(require, exports); if (v !== undefined) module.exports = v;
+	}
+	else if (typeof define === 'function' && define.amd) {
+		define(deps, factory);
+	}
+})(["require", "exports"], function (require, exports) {
   'use strict';
 
   var K = new Uint32Array([
@@ -176,6 +180,7 @@
     return this;
   };
 
+
   function HMAC(k) {
     var i, pad = new Uint8Array(64);
     if (k.length > 64)
@@ -267,5 +272,12 @@
     return dk;
   };
 
-  return sha256;
+
+	exports.SHA256 = {
+		HASH: sha256,
+		HMAC: sha256.hmac,
+		PBKDF2: sha256.pbkdf2
+	};
+
+
 });
